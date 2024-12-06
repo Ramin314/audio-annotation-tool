@@ -6,9 +6,10 @@ services:
     container_name: fastapi_app
     ports:
       - "5000:5000"
-    depends_on:
-      - db
-      - minio
+    volumes:
+      - ./app:/app/app
+      - ./data:/app/data
+    command: uvicorn app.main:app --host 0.0.0.0 --port 5000 --reload
 
   db:
     image: postgres:15
