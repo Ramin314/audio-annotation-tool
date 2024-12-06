@@ -1,7 +1,11 @@
 from sqlalchemy.orm import Session
-from . import models, schemas
+from . import models, schemas, enums
+from typing import Optional
 
 # Segments
+
+def get_segment(db: Session, id: int):
+    return db.query(models.Segment).get(id)
 
 def get_segments(db: Session, skip: int = 0, limit: int = 10):
     return db.query(models.Segment).offset(skip).limit(limit).all()
@@ -33,3 +37,14 @@ def create_audio_file(db: Session, recording_id: str, object_store_key: str):
     db.commit()
     db.refresh(db_audio_file)
     return db_audio_file
+
+# Annotations
+
+def update_segment_annotation(db: Session, segment_id: int, annotation: Optional[enums.AnnotationEnum]):
+    segment = db.query(models.Segment).filter(models.Segment.id == segment_id).first()
+    if not segment:
+        return None
+    segment.annotation = annotation
+    db.commit()
+    db.refresh(segment)
+    return segment

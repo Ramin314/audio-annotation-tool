@@ -1,4 +1,11 @@
 from pydantic import BaseModel
+from . import enums
+from typing import Optional
+
+# Annotations
+
+class UpdateAnnotation(BaseModel):
+    annotation: Optional[enums.AnnotationEnum] = None
 
 # Segments
 
@@ -13,6 +20,7 @@ class SegmentCreate(SegmentBase):
 
 class Segment(SegmentBase):
     id: int
+    annotation: Optional[enums.AnnotationEnum] = None
 
     class Config:
         orm_mode = True

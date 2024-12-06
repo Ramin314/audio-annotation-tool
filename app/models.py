@@ -1,6 +1,7 @@
-from sqlalchemy import Column, String, Float, Integer, ForeignKey
+from sqlalchemy import Column, String, Float, Integer, ForeignKey, Enum
 from sqlalchemy.orm import relationship
 from .database import Base
+from .enums import AnnotationEnum
 
 class Segment(Base):
     __tablename__ = "segments"
@@ -10,6 +11,7 @@ class Segment(Base):
     end = Column(Float, nullable=False)
     transcript = Column(String, nullable=False)
     audio_file_id = Column(Integer, ForeignKey("audio_files.id"), nullable=True)
+    annotation = Column(Enum(AnnotationEnum), nullable=True)
 
 class AudioFile(Base):
     __tablename__ = "audio_files"

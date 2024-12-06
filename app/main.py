@@ -31,6 +31,23 @@ def create_segment(segment: schemas.SegmentCreate, db = Depends(session)):
 def read_segments(skip: int = 0, limit: int = 10, db: Session = Depends(session)):
     return crud.get_segments(db=db, skip=skip, limit=limit)
 
+@app.get("/segments/{id}/", response_model=schemas.Segment)
+def read_segment(id: int, db: Session = Depends(session)):
+    segment = crud.get_segment(db=db, id=id)
+    if not segment:
+        raise HTTPException(status_code=404, detail="Segment not found")
+    return segment
+
+@app.patch("/segments/{id}/annotation/", response_model=schemas.Segment)
+def update_annotation(id: int, update_data: schemas.UpdateAnnotation, db: Session = Depends(session)):
+    """
+    Update the annotation field for a specific segment.
+    """
+    segment = crud.update_segment_annotation(db=db, segment_id=id, annotation=update_data.annotation)
+    if not segment:
+        raise HTTPException(status_code=404, detail="Segment not found")
+    return segment
+
 # Audio
 
 @app.post("/audio-files/", response_model=schemas.AudioFile)
