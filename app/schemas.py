@@ -30,6 +30,10 @@ class Segment(SegmentBase):
 class AudioFileBase(BaseModel):
     recording_id: str
     object_store_key: str
+    labeled_percentage: float
+    total_segments: int
+    labeled_segments: int
+    unlabeled_segments: int
 
 class AudioFileCreate(AudioFileBase):
     pass
