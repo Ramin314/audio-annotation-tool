@@ -7,13 +7,13 @@ const AudioFileList = () => {
   const [hasMore, setHasMore] = useState(false);
   const [searchParams, setSearchParams] = useSearchParams();
 
-  const currentPage = parseInt(searchParams.get('page') || '1', 10); // Default to page 1
+  const currentPage = parseInt(searchParams.get('page') || '1', 10);
 
   const fetchAudioFiles = async (page) => {
     const response = await fetch(`http://localhost:5000/audio-files/?skip=${(page - 1) * 10}&limit=10`);
     const data = await response.json();
     setAudioFiles(data);
-    setHasMore(data.length === 10); // If 4 items are returned, assume there may be more
+    setHasMore(data.length === 10);
   };
 
   useEffect(() => {
