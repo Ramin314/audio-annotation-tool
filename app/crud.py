@@ -61,7 +61,7 @@ def get_audio_files(db: Session, skip: int = 0, limit: int = 10):
             "total_segments": result.total_segments,
             "labeled_segments": result.labeled_segments,
             "unlabeled_segments": result.total_segments - result.labeled_segments,
-            "labeled_percentage": percent
+            "labeled_percentage": percent,
         })
 
     return labeled_stats
@@ -103,7 +103,7 @@ def get_audio_file_by_recording_id(db: Session, recording_id: str):
         "total_segments": result.total_segments,
         "labeled_segments": result.labeled_segments,
         "unlabeled_segments": result.total_segments - result.labeled_segments,
-        "labeled_percentage": labeled_percentage
+        "labeled_percentage": labeled_percentage,
     }
 
 def create_audio_file(db: Session, recording_id: str, object_store_key: str):
