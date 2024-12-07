@@ -23,3 +23,8 @@ those with the least annotations -- have more visibility.
 - Audio files are stored in MinIO, an S3 compatible object store. You can manually upload files at `localhost:9000`
 - Data is stored in PostgreSQL
 - The frontend is written in React
+
+## Assumptions
+
+- I have assumed that audio files will be relatively short since they need to be able to be loaded into the browser's memory using the audio API rather than being streamed. Streaming would've added another layer of complexity. Likewise, segments are assumed to not be too many and have therefore not been paginated in the API.
+- I assumed it was okay to hardcode endpoint addresses and passwords to services instead of using environment variables since this is not a production level application. In the same spirit, I have not used any code formatting, linting, or unit testing.
