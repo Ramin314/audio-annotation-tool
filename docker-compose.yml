@@ -7,7 +7,20 @@ services:
     volumes:
       - ./app:/app/app
       - ./data:/app/data
-    command: uvicorn app.main:app --host 0.0.0.0 --port 5000 --reload
+    command: >
+      sh -c "
+      ./app/wait-for-it.sh db:5432 --timeout=30 --strict &&
+      ./app/wait-for-it.sh minio:9000 --timeout=30 --strict &&
+      uvicorn app.main:app --host 0.0.0.0 --port 5000 --reload
+      "
+    depends_on:
+      - db
+      - minio
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://app:5000/health"]
+      interval: 10s
+      timeout: 15s
+      retries: 5
 
   db:
     image: postgres:15
@@ -19,6 +32,11 @@ services:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
   minio:
     image: minio/minio
@@ -32,6 +50,11 @@ services:
       - "9001:9001"
     volumes:
       - minio_data:/data
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/ready"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
 
   minio_setup:
     container_name: minio_setup
@@ -57,13 +80,20 @@ services:
     ports:
       - "3000:3000"
     volumes:
-      - ./frontend:/app             # Mount source code
-      - /app/node_modules           # Ensure container's node_modules is used
+      - ./frontend:/app
+      - /app/node_modules
     stdin_open: true
     tty: true
     environment:
       - CHOKIDAR_USEPOLLING=true
-
+    depends_on:
+      app:
+        condition: service_healthy
+    command: >
+      sh -c "
+      ./wait-for-it.sh app:5000 --timeout=30 --strict &&
+      npm start
+      "
 
 volumes:
   postgres_data:

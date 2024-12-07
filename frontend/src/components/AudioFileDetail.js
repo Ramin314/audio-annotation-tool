@@ -113,25 +113,25 @@ const AudioFileDetail = () => {
                         <div className="content">
                             <div className="header" style={{marginTop: '1em'}}>
                                 <strong>Start:</strong>{' '}
-                                <a
-                                    href="#"
+                                <span
                                     onClick={(e) => {
                                         e.preventDefault();
                                         seekToTime(segment.start);
                                     }}
+                                    style={{color: '#4183c4', cursor: 'pointer'}}
                                 >
                                     {segment.start}s
-                                </a>
+                                </span>
                                 , <strong>End:</strong>{' '}
-                                <a
-                                    href="#"
+                                <span
                                     onClick={(e) => {
                                         e.preventDefault();
                                         seekToTime(segment.end);
                                     }}
+                                    style={{color: '#4183c4', cursor: 'pointer'}}
                                 >
                                     {segment.end}s
-                                </a>
+                                </span>
                             </div>
                             <div className="description" style={{ marginTop: '10px' }}>
                                 <strong>Transcript:</strong> {segment.transcript}

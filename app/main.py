@@ -34,6 +34,12 @@ def startup_event():
     process_segments_directory(DATA_DIR, AUDIO_DIR, db)
     db.close()
 
+# Health check
+
+@app.get("/health")
+def health_check():
+    return {"status": "ok"}
+
 # Segments
 
 @app.post("/segments/", response_model=schemas.Segment)
