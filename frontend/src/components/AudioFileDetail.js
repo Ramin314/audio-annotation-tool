@@ -64,6 +64,37 @@ const AudioFileDetail = () => {
     }
   };
 
+  const updateAnnotation = async (segmentId, annotation) => {
+    try {
+      const response = await fetch(`http://localhost:5000/segments/${segmentId}/annotation`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ annotation }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to update annotation');
+      }
+
+      const updatedSegment = await response.json();
+
+      setSegments((prevSegments) =>
+        prevSegments.map((seg) =>
+          seg.id === segmentId ? { ...seg, annotation: updatedSegment.annotation } : seg
+        )
+      );
+    } catch (error) {
+      console.error('Error updating annotation:', error);
+    }
+  };
+
+  const handleAnnotationClick = (segment, annotation) => {
+    const newAnnotation = segment.annotation === annotation ? null : annotation;
+    updateAnnotation(segment.id, newAnnotation);
+  };
+
   return (
     <div>
       <h1>Segments for Audio File ID: {id}</h1>
@@ -98,6 +129,32 @@ const AudioFileDetail = () => {
               {segment.end}s
             </a>
             , <strong>Transcript:</strong> {segment.transcript}
+            <div>
+              <button
+                onClick={() => handleAnnotationClick(segment, 'noise')}
+                style={{
+                  backgroundColor: segment.annotation === 'noise' ? '#ccc' : '#fff',
+                }}
+              >
+                Noise
+              </button>
+              <button
+                onClick={() => handleAnnotationClick(segment, 'silence')}
+                style={{
+                  backgroundColor: segment.annotation === 'silence' ? '#ccc' : '#fff',
+                }}
+              >
+                Silence
+              </button>
+              <button
+                onClick={() => handleAnnotationClick(segment, 'speech')}
+                style={{
+                  backgroundColor: segment.annotation === 'speech' ? '#ccc' : '#fff',
+                }}
+              >
+                Speech
+              </button>
+            </div>
           </li>
         ))}
       </ul>
