@@ -57,9 +57,9 @@ const Waveform = ({ audio, onReady }) => {
   return (
     <WaveSurferWrap>
       <button onClick={handlePlayPause} type="button">
-        {isPlaying ? <FaPauseCircle size="3em" /> : <FaPlayCircle size="3em" />}
+        {isPlaying ? <FaPauseCircle size="3em" color="#6e5bcb" /> : <FaPlayCircle size="3em" color="#6e5bcb" />}
       </button>
-      <div ref={containerRef} />
+      <div ref={containerRef} style={{marginLeft: '30px'}} />
     </WaveSurferWrap>
   );
 };

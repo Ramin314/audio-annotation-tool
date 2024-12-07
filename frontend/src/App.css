@@ -36,3 +36,12 @@
     transform: rotate(360deg);
   }
 }
+
+.annotation-button {
+  margin-right: 1em !important;
+}
+
+.annotation-button.active {
+  background-color: #6e5bcb !important;
+  color: white !important;
+}

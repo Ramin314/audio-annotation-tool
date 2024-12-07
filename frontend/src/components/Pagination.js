@@ -1,21 +1,28 @@
 import React from 'react';
 
-const Pagination = ({ currentPage, totalPages, setCurrentPage }) => {
+const Pagination = ({ currentPage, hasMore, setCurrentPage }) => {
   const handlePrevious = () => {
     if (currentPage > 1) setCurrentPage(currentPage - 1);
   };
 
   const handleNext = () => {
-    if (currentPage < totalPages) setCurrentPage(currentPage + 1);
+    if (hasMore) setCurrentPage(currentPage + 1);
   };
 
   return (
-    <div>
-      <button onClick={handlePrevious} disabled={currentPage === 1}>
+    <div className='ui container center aligned' style={{ marginTop: '20px' }}>
+      <button
+        className='ui button'
+        onClick={handlePrevious}
+        disabled={currentPage === 1}
+      >
         Previous
       </button>
-      <span> Page {currentPage} of {totalPages} </span>
-      <button onClick={handleNext} disabled={currentPage === totalPages}>
+      <button
+        className='ui button'
+        onClick={handleNext}
+        disabled={!hasMore}
+      >
         Next
       </button>
     </div>
